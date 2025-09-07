@@ -11,8 +11,8 @@
 - [X] Split functionality into `core.py` (business logic) and `cli.py` (CLI
 interface)
 - [X] Replaced argparse with Typer for modern CLI handling
-- [X] Maintained all original command-line arguments (--session, --save-image,
---no-terminal, --output)
+- [X] Maintained all original command-line arguments (`--session`,
+`--save-image`, `--no-terminal`, `--output`)
 - [X] Updated QUICKSTART.md to reflect new `uv run rollcall` command usage
 - [X] Replaced README.md content with updated QUICKSTART.md for single source of
 truth
