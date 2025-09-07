@@ -1,7 +1,8 @@
 # Rollcall
 
 A Python program that generates QR codes linking to Google Forms with pre-filled
-attendance information including date, time, and session details.
+attendance information including date, time, and session details. Now configurable
+via JSON for multiple classes.
 
 ## Features
 
@@ -9,6 +10,7 @@ attendance information including date, time, and session details.
 - ✅ Pre-fills Google Form with current date, time, and session information
 - ✅ Displays QR codes in terminal using ASCII characters
 - ✅ Optionally saves QR codes as PNG image files
+- ✅ Configurable via JSON for multiple classes and forms
 - ✅ Cross-platform compatibility (Linux, macOS, Windows)
 - ✅ Managed with UV for easy dependency management
 - ✅ Uses Python 3.13 with minimal dependencies
@@ -25,25 +27,54 @@ attendance information including date, time, and session details.
 
 ### Setup
 
-1. Clone or download the attendance-tracker directory
+1. Clone or download the rollcall directory
 2. Navigate to the project directory:
    ```bash
-   cd attendance-tracker
+   cd rollcall
    ```
 3. Install dependencies (automatically creates virtual environment):
    ```bash
    uv sync
    ```
 
-## Google Form Setup
+## Configuration
 
-### Step 1: Create a Google Form
+### Step 1: Create rollcall.json
+
+Create a `rollcall.json` file in your project directory with your class configurations:
+
+```json
+{
+    "Computer Science 101": {
+        "form_url": "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform",
+        "prefill_params": {
+            "date_field": "entry.YOUR_DATE_ENTRY_ID",
+            "time_field": "entry.YOUR_TIME_ENTRY_ID",
+            "datetime_field": "entry.YOUR_DATETIME_ENTRY_ID",
+            "session_name_field": "entry.YOUR_SESSION_ENTRY_ID"
+        }
+    },
+    "Math 101": {
+        "form_url": "https://docs.google.com/forms/d/e/ANOTHER_FORM_ID/viewform",
+        "prefill_params": {
+            "date_field": "entry.ANOTHER_DATE_ID",
+            "time_field": "entry.ANOTHER_TIME_ID",
+            "datetime_field": "entry.ANOTHER_DATETIME_ID",
+            "session_name_field": "entry.ANOTHER_SESSION_ID"
+        }
+    }
+}
+```
+
+### Step 2: Google Form Setup
+
+#### Create a Google Form
 
 1. Go to [forms.google.com](https://forms.google.com)
 2. Create a new form titled "Class Attendance"
 3. Add the following fields (in this exact order):
 
-#### Required Form Fields:
+##### Required Form Fields:
 
 1. **Date Field**
    - Question: "Date"
@@ -75,12 +106,12 @@ attendance information including date, time, and session details.
    - Type: Short answer
    - Make required: Yes
 
-### Step 2: Get Pre-fill URLs and Extract Entry IDs
+#### Get Pre-fill URLs and Extract Entry IDs
 
 **IMPORTANT**: You must use the full Google Forms URL format (not forms.gle short URLs) for the program to work correctly.
 
 1. In your Google Form, click the **Send** button (top right)
-2. Click the **link icon** (🔗) 
+2. Click the **link icon** (🔗)
 3. **Copy the full URL** - it should look like:
    ```
    https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform
@@ -97,69 +128,50 @@ attendance information including date, time, and session details.
    https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?usp=pp_url&entry.123456789=2025-01-01&entry.234567890=10:00:00&entry.345678901=2025-01-01+10:00:00&entry.456789012=Sample+Class
    ```
 
-### Step 3: Extract Entry IDs
+#### Extract Entry IDs
 
 From your pre-filled URL, note the entry IDs:
 - `entry.123456789` - Date field
-- `entry.234567890` - Time field  
+- `entry.234567890` - Time field
 - `entry.345678901` - Date/Time field
 - `entry.456789012` - Session field
 
-### Step 4: Update the Program
-
-Edit `src/attendance_tracker/main.py` and replace the placeholder entry IDs (around line 35):
-
-```python
-# Replace these with your actual entry IDs from step 3
-prefill_params = {
-    'entry.123456789': date_str,        # Your Date field entry ID
-    'entry.234567890': time_str,        # Your Time field entry ID  
-    'entry.345678901': datetime_str,    # Your Date/Time field entry ID
-    'entry.456789012': session_name,    # Your Session field entry ID
-}
-```
-
-**Example**: If your entry IDs are 275116116, 1240679346, 413810672, and 850922479, update the code to:
-
-```python
-prefill_params = {
-    'entry.275116116': date_str,        # Date field
-    'entry.1240679346': time_str,       # Time field  
-    'entry.413810672': datetime_str,    # Date/Time field
-    'entry.850922479': session_name,    # Session field
-}
-```
+Update your `rollcall.json` with these entry IDs.
 
 ## Usage
 
 ### Basic Usage
 
 ```bash
-# Display QR code in terminal (use the FULL URL, not forms.gle short URL)
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform"
+# Display QR code in terminal for a class
+uv run rollcall "Computer Science 101"
 
 # Specify session name
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --session "Math 101"
+uv run rollcall "Computer Science 101" --session "Math 101 - Lecture 1"
 
 # Save QR code as image file
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --save-image
+uv run rollcall "Computer Science 101" --save-image
 
 # Save with custom filename
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --save-image --output "math101_qr.png"
+uv run rollcall "Computer Science 101" --save-image --output "cs101_qr.png"
+
+# Use custom config file
+uv run rollcall "Computer Science 101" --config /path/to/my/rollcall.json
 
 # Don't display in terminal (useful for automated scripts)
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --no-terminal --save-image
+uv run rollcall "Computer Science 101" --no-terminal --save-image
 ```
 
 ### ⚠️ Important Notes
 
-1. **Use FULL URLs**: Always use the full `https://docs.google.com/forms/d/e/...` URL format, not `forms.gle` short URLs
-2. **Update Entry IDs**: Make sure you've updated the entry IDs in the source code with your actual form's entry IDs
+1. **Use FULL URLs**: Always use the full `https://docs.google.com/forms/d/e/...` URL format in your JSON, not `forms.gle` short URLs
+2. **Update Entry IDs**: Make sure you've updated the entry IDs in your `rollcall.json` with your actual form's entry IDs
 3. **Test First**: Test the generated URL manually in a browser to ensure it works before using with students
 
 ### Command Line Options
 
-- `form_url`: Your Google Form URL (required - must be full URL format)
+- `class_name`: Name of the class (required - must match a key in rollcall.json)
+- `--config CONFIG`: Path to rollcall.json (default: "rollcall.json")
 - `--session SESSION`: Session/class name (default: "Class")
 - `--save-image`: Save QR code as PNG image file
 - `--no-terminal`: Don't display QR code in terminal
@@ -169,7 +181,7 @@ uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/view
 
 1. **Before class**: Run the program to generate a QR code:
    ```bash
-   uv run python attendance.py "https://docs.google.com/forms/d/e/1FAIpQLSdj93F7_7xUiHzvwE_BHJg1m8o1uSNSZVf79J2oYaKoGdCP5A/viewform" --session "Document Engineering - Week 1" --save-image
+   uv run rollcall "Computer Science 101" --session "Document Engineering - Week 1" --save-image
    ```
 
 2. **During class**: Display the QR code on your screen or projector
@@ -182,34 +194,38 @@ uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/view
 
 ## How It Works
 
-1. **QR Code Generation**: Creates a QR code containing a URL to your Google Form
-2. **Pre-filling**: Automatically appends current date, time, and session info to the form URL
-3. **Student Experience**: Students scan → form opens → date/time/session already filled → they add name/email → submit
-4. **Data Collection**: All responses saved to Google Forms/Sheets with timestamp verification
+1. **Configuration Loading**: Reads class settings from rollcall.json
+2. **QR Code Generation**: Creates a QR code containing a URL to your Google Form
+3. **Pre-filling**: Automatically appends current date, time, and session info to the form URL
+4. **Student Experience**: Students scan → form opens → date/time/session already filled → they add name/email → submit
+5. **Data Collection**: All responses saved to Google Forms/Sheets with timestamp verification
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **"qrcode library not found"**
-   - Run: `uv sync` to install dependencies
+1. **"Configuration file not found"**
+   - Ensure rollcall.json exists in the current directory or specify path with --config
 
-2. **Entry IDs not working**
+2. **"Class not found in configuration"**
+   - Check that the class name matches exactly (case-sensitive) a key in rollcall.json
+
+3. **Entry IDs not working**
    - Double-check you copied the correct entry IDs from your pre-filled URL
    - Make sure the form fields are in the correct order
 
-3. **QR code not displaying properly**
+4. **QR code not displaying properly**
    - Try using `--save-image` and view the PNG file
    - Some terminals may not display ASCII QR codes clearly
 
-4. **Students can't access form**
+5. **Students can't access form**
    - Make sure your Google Form is set to "Anyone with the link"
    - Test the generated URL manually in a browser
 
 ### Testing
 
 Test your setup by:
-1. Running the program with your form URL
+1. Running the program with your class name
 2. Scanning the QR code with your phone
 3. Verifying the form opens with pre-filled date/time/session data
 4. Submitting a test response
