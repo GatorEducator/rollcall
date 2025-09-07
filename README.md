@@ -1,4 +1,4 @@
-# Attendance Tracker with QR Code Generation
+# Rollcall
 
 A Python program that generates QR codes linking to Google Forms with pre-filled
 attendance information including date, time, and session details.
