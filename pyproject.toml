@@ -28,6 +28,33 @@ dependencies = [
     "typer>=0.12.0",
 ]
 
+[tool.ruff]
+line-length = 79
+lint.ignore = [
+    "D203", # do not check blank lines
+    "D213", # do not check multi-line docstrings
+    "E501", # do not check line length
+]
+lint.select = [
+    "E",    # pycodestyle
+    "D",    # pydocstyle
+    "I",    # isort
+    "F",    # pyflakes
+    "PL",   # pylint
+    "Q",    # flake8-quotes
+    "RUF",  # ruff-specific
+    "W",    # pycodestyle warnings
+    "T201"  # flake8-print
+]
+
+[tool.isort]
+include_trailing_comma = true
+force_single_line = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+
 [project.urls]
 Homepage = "https://github.com/GatorEducator/rollcall"
 Repository = "https://github.com/GatorEducator/rollcall"
