@@ -24,3 +24,8 @@ test commands
 and invalid JSON errors. Verified all tests pass with `uv run pytest`.
 - [X] Created README_PYPI.md as an emoji-free version of README.md for PyPI
 compatibility.
+- [X] Replaced all naked print statements in `core.py` with a Typer console
+object using `console.print()` for better CLI output handling.
+- [X] Fixed all markdownlint errors in README.md and README_PYPI.md by
+correcting headings, code blocks, and disabling problematic rules in
+`.pymarkdown.cfg`. Confirmed `uv run task all` passes all checks.
