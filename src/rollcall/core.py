@@ -78,12 +78,11 @@ def generate_attendance_url(
         else:
             base_without_query = base_form_url.split("?")[0]
             attendance_url = f"{base_without_query}?{query_string}"
+    # handle forms.gle or other formats - just add query parameters
+    elif "?" in base_form_url:
+        attendance_url = f"{base_form_url}&{query_string}"
     else:
-        # handle forms.gle or other formats - just add query parameters
-        if "?" in base_form_url:
-            attendance_url = f"{base_form_url}&{query_string}"
-        else:
-            attendance_url = f"{base_form_url}?{query_string}"
+        attendance_url = f"{base_form_url}?{query_string}"
     return attendance_url
 
 
