@@ -1,11 +1,18 @@
 """Rollcall CLI - Command Line Interface using Typer."""
 
 from datetime import datetime
+from pathlib import Path
 
 import typer
 from typing_extensions import Annotated
 
-from .core import generate_attendance_url, generate_qr_code, save_qr_code_image
+from .core import (
+    generate_attendance_url,
+    generate_qr_code,
+    get_class_config,
+    load_config,
+    save_qr_code_image,
+)
 
 app = typer.Typer(
     name="rollcall",
@@ -16,9 +23,12 @@ app = typer.Typer(
 
 @app.command()
 def main(
-    form_url: Annotated[
-        str, typer.Argument(help="Google Form URL for attendance tracking")
+    class_name: Annotated[
+        str, typer.Argument(help="Name of the class (e.g., 'Computer Science 101')")
     ],
+    config_path: Annotated[
+        Path, typer.Option("--config", help="Path to rollcall.json configuration file")
+    ] = Path("rollcall.json"),
     session: Annotated[
         str, typer.Option("--session", help="Session/class name")
     ] = "Class",
@@ -34,8 +44,13 @@ def main(
 ) -> None:
     """Generate QR codes for class attendance tracking with pre-filled form data."""
     try:
+        # load configuration
+        config = load_config(config_path)
+        class_config = get_class_config(config, class_name)
+        form_url = class_config["form_url"]
+        prefill_params = class_config["prefill_params"]
         # generate the attendance URL with current date/time
-        attendance_url = generate_attendance_url(form_url, session)
+        attendance_url = generate_attendance_url(form_url, session, prefill_params)
         typer.echo(f"Generating QR code for session: {session}")
         typer.echo(f"Current date/time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         typer.echo(f"Form URL: {attendance_url}")
