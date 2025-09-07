@@ -76,7 +76,7 @@ From the pre-filled URL above, identify your entry IDs:
 
 ### Step 4: Update the Python Program
 
-1. Open `src/attendance_tracker/main.py`
+1. Open `src/rollcall/core.py`
 2. Find this section (around line 35):
    ```python
    prefill_params = {
@@ -103,10 +103,10 @@ From the pre-filled URL above, identify your entry IDs:
 
 ```bash
 # Test with your full form URL
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform"
+uv run rollcall "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform"
 
 # Example with the working test form:
-uv run python attendance.py "https://docs.google.com/forms/d/e/1FAIpQLSdj93F7_7xUiHzvwE_BHJg1m8o1uSNSZVf79J2oYaKoGdCP5A/viewform" --session "Test Class"
+uv run rollcall "https://docs.google.com/forms/d/e/1FAIpQLSdj93F7_7xUiHzvwE_BHJg1m8o1uSNSZVf79J2oYaKoGdCP5A/viewform" --session "Test Class"
 ```
 
 ### Step 6: Verify It Works
@@ -121,13 +121,13 @@ uv run python attendance.py "https://docs.google.com/forms/d/e/1FAIpQLSdj93F7_7x
 
 ```bash
 # Generate QR for today's class
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --session "Document Engineering - Week 5"
+uv run rollcall "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --session "Document Engineering - Week 5"
 
 # Save as image for projection
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --session "Math 101" --save-image --output "math101_attendance.png"
+uv run rollcall "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --session "Math 101" --save-image --output "math101_attendance.png"
 
 # Generate without terminal display (for scripts)
-uv run python attendance.py "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --no-terminal --save-image
+uv run rollcall "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" --no-terminal --save-image
 ```
 
 ## ⚠️ Common Issues and Solutions
