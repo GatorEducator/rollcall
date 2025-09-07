@@ -1,6 +1,6 @@
 # Plan for Rollcall
 
-## TODO List
+## Open Tasks
 
 ## Completed Tasks
 
