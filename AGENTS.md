@@ -125,8 +125,9 @@ All test cases should follow these standards:
 
 ## Additional Notes for the Coding Agent
 
-Note: This file is specifically for coding agents and this section can be used
-by the coding agent to add additional details about this project that would
-be helpful for the agent to know when it is run again. Every time a coding
-agent finishes a task, it should add notes here as it deems appropriate.
-The coding agent should write the notes as a Markdown list.
+Note: Every time a coding agent finishes a task, it should add notes to the
+PLAN.md file as it deems appropriate. The coding agent should write the notes as
+a Markdown list. The purpose of the notes in the PLAN.md file are to summarize
+the changes that the coding agent made to the codebase. The coding agent should
+always carefully explain the changes that it made so that the human software
+engineer can understand the changes that were made.
