@@ -29,10 +29,13 @@ via JSON for multiple classes.
 
 1. Clone or download the rollcall directory
 2. Navigate to the project directory:
+
    ```bash
    cd rollcall
    ```
+
 3. Install dependencies (automatically creates virtual environment):
+
    ```bash
    uv sync
    ```
@@ -74,37 +77,43 @@ Create a `rollcall.json` file in your project directory with your class configur
 2. Create a new form titled "Class Attendance"
 3. Add the following fields (in this exact order):
 
-##### Required Form Fields:
+##### Required Form Fields
 
-1. **Date Field**
-   - Question: "Date"
-   - Type: Short answer
-   - Make required: Yes
+### Date Field
 
-2. **Time Field**
-   - Question: "Time"
-   - Type: Short answer
-   - Make required: Yes
+- Question: "Date"
+- Type: Short answer
+- Make required: Yes
 
-3. **Date/Time Field**
-   - Question: "Date and Time"
-   - Type: Short answer
-   - Make required: Yes
+### Time Field
 
-4. **Session/Class Field**
-   - Question: "Session"
-   - Type: Short answer
-   - Make required: Yes
+- Question: "Time"
+- Type: Short answer
+- Make required: Yes
 
-5. **Student Name Field**
-   - Question: "Your Name"
-   - Type: Short answer
-   - Make required: Yes
+### Date/Time Field
 
-6. **Student Email Field**
-   - Question: "Your Email"
-   - Type: Short answer
-   - Make required: Yes
+- Question: "Date and Time"
+- Type: Short answer
+- Make required: Yes
+
+### Session/Class Field
+
+- Question: "Session"
+- Type: Short answer
+- Make required: Yes
+
+### Student Name Field
+
+- Question: "Your Name"
+- Type: Short answer
+- Make required: Yes
+
+### Student Email Field
+
+- Question: "Your Email"
+- Type: Short answer
+- Make required: Yes
 
 #### Get Pre-fill URLs and Extract Entry IDs
 
@@ -123,10 +132,7 @@ Create a `rollcall.json` file in your project directory with your class configur
    - Date and Time: "2025-01-01 10:00:00"
    - Session: "Sample Class"
 6. Click **"Get link"**
-7. Copy the generated pre-filled URL - it will look like:
-   ```
-   https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?usp=pp_url&entry.123456789=2025-01-01&entry.234567890=10:00:00&entry.345678901=2025-01-01+10:00:00&entry.456789012=Sample+Class
-   ```
+7. Copy the generated pre-filled URL - it will look like: `https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?usp=pp_url&entry.123456789=2025-01-01&entry.234567890=10:00:00&entry.345678901=2025-01-01+10:00:00&entry.456789012=Sample+Class`
 
 #### Extract Entry IDs
 
@@ -180,6 +186,7 @@ uv run rollcall "Computer Science 101" --no-terminal --save-image
 ### Example Workflow
 
 1. **Before class**: Run the program to generate a QR code:
+
    ```bash
    uv run rollcall "Computer Science 101" --session "Document Engineering - Week 1" --save-image
    ```
@@ -204,21 +211,21 @@ uv run rollcall "Computer Science 101" --no-terminal --save-image
 
 ### Common Issues
 
-1. **"Configuration file not found"**
+1. "Configuration file not found"
    - Ensure rollcall.json exists in the current directory or specify path with --config
 
-2. **"Class not found in configuration"**
+2. "Class not found in configuration"
    - Check that the class name matches exactly (case-sensitive) a key in rollcall.json
 
-3. **Entry IDs not working**
+3. "Entry IDs not working"
    - Double-check you copied the correct entry IDs from your pre-filled URL
    - Make sure the form fields are in the correct order
 
-4. **QR code not displaying properly**
+4. "QR code not displaying properly"
    - Try using `--save-image` and view the PNG file
    - Some terminals may not display ASCII QR codes clearly
 
-5. **Students can't access form**
+5. "Students can't access form"
    - Make sure your Google Form is set to "Anyone with the link"
    - Test the generated URL manually in a browser
 
