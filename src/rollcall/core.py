@@ -1,12 +1,39 @@
 """Core functionality of the rollcall program that generates a QR Code for attendance tracking."""
 
+import json
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import urlencode, urlparse, parse_qs
 import qrcode
 import qrcode.constants
 
 
-def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> str:
+def load_config(config_path: Path) -> dict:
+    """Load configuration from JSON file."""
+    try:
+        with config_path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Configuration file not found: {config_path}")
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON in configuration file: {e}")
+
+
+def get_class_config(config: dict, class_name: str) -> dict:
+    """Get configuration for a specific class."""
+    if class_name not in config:
+        raise ValueError(f"Class '{class_name}' not found in configuration")
+    class_config = config[class_name]
+    if "form_url" not in class_config or "prefill_params" not in class_config:
+        raise ValueError(
+            f"Invalid configuration for class '{class_name}': missing form_url or prefill_params"
+        )
+    return class_config
+
+
+def generate_attendance_url(
+    base_form_url: str, session_name: str, prefill_params: dict[str, str]
+) -> str:
     """Generate attendance URL with pre-filled form parameters."""
     current_time = datetime.now()
     date_str = current_time.strftime("%Y-%m-%d")
@@ -14,7 +41,7 @@ def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> 
     datetime_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
     # warn user if they're using a short URL
     if "forms.gle" in base_form_url:
-        print(":high_brightness: Warning: You're using a forms.gle short URL.")
+        print("⚠️  WARNING: You're using a forms.gle short URL.")
         print("   For best results, convert to the full URL format:")
         print("   1. Open your form")
         print("   2. Click 'Send' → Link icon")
@@ -23,13 +50,12 @@ def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> 
         print()
     # parse the URL to extract form ID and existing parameters
     parsed_url = urlparse(base_form_url)
-    # common Google Form pre-fill parameter patterns
-    # these will need to be customized based on your specific form
-    prefill_params = {
-        "entry.275116116": date_str,  # Date field - replace with actual entry ID
-        "entry.1240679346": time_str,  # Time field - replace with actual entry ID
-        "entry.413810672": datetime_str,  # DateTime field - replace with actual entry ID
-        "entry.850922479": session_name,  # Session name field - replace with actual entry ID
+    # build prefill parameters from config
+    params = {
+        prefill_params["date_field"]: date_str,
+        prefill_params["time_field"]: time_str,
+        prefill_params["datetime_field"]: datetime_str,
+        prefill_params["session_name_field"]: session_name,
     }
     # if the URL already has parameters, preserve them
     if parsed_url.query:
@@ -37,9 +63,9 @@ def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> 
         # flatten the existing parameters (parse_qs returns lists)
         for key, value_list in existing_params.items():
             if value_list:
-                prefill_params[key] = value_list[0]
+                params[key] = value_list[0]
     # build the complete URL with pre-filled parameters
-    query_string = urlencode(prefill_params)
+    query_string = urlencode(params)
     # handle different Google Forms URL formats
     if "docs.google.com/forms" in base_form_url:
         # full URL format - ensure it has /viewform
