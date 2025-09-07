@@ -15,6 +15,8 @@ file.
   style. Use `uv run task all`.
 - **Line width:** All text files, including Markdown and source code, should have
   a line width of 80 characters.
+- **Format PLAN.md:** Manually ensure PLAN.md lines do not exceed 80 characters by
+  wrapping long lines appropriately.
 - **Permission to run commands:** You have permission to run all commands in this
   file to verify their functionality.
 - **Incremental changes:** Make small, incremental changes. This makes it easier
