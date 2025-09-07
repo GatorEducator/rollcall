@@ -7,7 +7,7 @@ name = "rollcall"
 version = "0.1.0"
 description = "QR Code Attendance Tracker for Classes"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 authors = [
     {name = "rollcall", email = "gkapfham@allegheny.edu"},
 ]
@@ -17,6 +17,7 @@ classifiers = [
     "Intended Audience :: Education",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Education",
     "Topic :: Utilities",
