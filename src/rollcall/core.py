@@ -3,7 +3,8 @@
 import json
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import urlencode, urlparse, parse_qs
+from urllib.parse import parse_qs, urlencode, urlparse
+
 import qrcode
 import qrcode.constants
 
