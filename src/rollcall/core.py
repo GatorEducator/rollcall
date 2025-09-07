@@ -5,11 +5,6 @@ from urllib.parse import urlencode, urlparse, parse_qs
 import qrcode
 import qrcode.constants
 
-# try:
-# except ImportError:
-#     print("Error: qrcode library not found. Please install with: uv add qrcode pillow")
-#     sys.exit(1)
-
 
 def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> str:
     """Generate attendance URL with pre-filled form parameters."""
@@ -19,7 +14,7 @@ def generate_attendance_url(base_form_url: str, session_name: str = "Class") -> 
     datetime_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
     # warn user if they're using a short URL
     if "forms.gle" in base_form_url:
-        print("⚠️  WARNING: You're using a forms.gle short URL.")
+        print(":high_brightness: Warning: You're using a forms.gle short URL.")
         print("   For best results, convert to the full URL format:")
         print("   1. Open your form")
         print("   2. Click 'Send' → Link icon")
