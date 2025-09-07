@@ -7,6 +7,9 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 import qrcode
 import qrcode.constants
+from rich.console import Console
+
+console = Console()
 
 
 def load_config(config_path: Path) -> dict:
@@ -42,13 +45,15 @@ def generate_attendance_url(
     datetime_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
     # warn user if they're using a short URL
     if "forms.gle" in base_form_url:
-        print("⚠️  WARNING: You're using a forms.gle short URL.")
-        print("   For best results, convert to the full URL format:")
-        print("   1. Open your form")
-        print("   2. Click 'Send' → Link icon")
-        print("   3. Copy the full URL (starts with https://docs.google.com/forms)")
-        print("   4. Use that URL instead")
-        print()
+        console.print("⚠️  WARNING: You're using a forms.gle short URL.")
+        console.print("   For best results, convert to the full URL format:")
+        console.print("   1. Open your form")
+        console.print("   2. Click 'Send' → Link icon")
+        console.print(
+            "   3. Copy the full URL (starts with https://docs.google.com/forms)"
+        )
+        console.print("   4. Use that URL instead")
+        console.print()
     # parse the URL to extract form ID and existing parameters
     parsed_url = urlparse(base_form_url)
     # build prefill parameters from config
@@ -86,7 +91,9 @@ def generate_attendance_url(
     return attendance_url
 
 
-def generate_qr_code(data: str, display_in_terminal: bool = True) -> qrcode.QRCode:
+def generate_qr_code(
+    data: str, display_in_terminal: bool = True
+) -> qrcode.QRCode:
     """Generate QR code for the given data."""
     qr = qrcode.QRCode(
         version=1,
@@ -110,8 +117,10 @@ def generate_qr_code(data: str, display_in_terminal: bool = True) -> qrcode.QRCo
     return qr
 
 
-def save_qr_code_image(qr: qrcode.QRCode, filename: str = "attendance_qr.png") -> None:
+def save_qr_code_image(
+    qr: qrcode.QRCode, filename: str = "attendance_qr.png"
+) -> None:
     """Save QR code as an image file."""
     img = qr.make_image(fill_color="black", back_color="white")
     img.save(filename)
-    print(f"QR code saved as: {filename}")
+    console.print(f"QR code saved as: {filename}")
