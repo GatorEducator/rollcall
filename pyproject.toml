@@ -28,9 +28,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/example/rollcall"
-Repository = "https://github.com/example/rollcall"
-Issues = "https://github.com/example/rollcall/issues"
+Homepage = "https://github.com/GatorEducator/rollcall"
+Repository = "https://github.com/GatorEducator/rollcall"
+Issues = "https://github.com/GatorEducator/rollcall/issues"
 
 [project.scripts]
 rollcall = "rollcall.cli:app"
