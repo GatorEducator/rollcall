@@ -22,21 +22,31 @@ app = typer.Typer(
 
 
 @app.command()
-def main(
+def main(  # noqa: PLR0913
     class_name: Annotated[
-        str, typer.Argument(help="Name of the class (e.g., 'Computer Science 101')")
+        str,
+        typer.Argument(
+            help="Name of the class (e.g., 'Computer Science 101')"
+        ),
     ],
     config_path: Annotated[
-        Path, typer.Option("--config", help="Path to rollcall.json configuration file")
+        Path,
+        typer.Option(
+            "--config", help="Path to rollcall.json configuration file"
+        ),
     ] = Path("rollcall.json"),
     session: Annotated[
         str, typer.Option("--session", help="Session/class name")
     ] = "Class",
     save_image: Annotated[
-        bool, typer.Option("--save-image", help="Save QR code as PNG image file")
+        bool,
+        typer.Option("--save-image", help="Save QR code as PNG image file"),
     ] = False,
     no_terminal: Annotated[
-        bool, typer.Option("--no-terminal", help="Don't display QR code in terminal")
+        bool,
+        typer.Option(
+            "--no-terminal", help="Don't display QR code in terminal"
+        ),
     ] = False,
     output: Annotated[
         str, typer.Option("--output", help="Output filename for QR code image")
@@ -50,13 +60,19 @@ def main(
         form_url = class_config["form_url"]
         prefill_params = class_config["prefill_params"]
         # generate the attendance URL with current date/time
-        attendance_url = generate_attendance_url(form_url, session, prefill_params)
+        attendance_url = generate_attendance_url(
+            form_url, session, prefill_params
+        )
         typer.echo(f"Generating QR code for session: {session}")
-        typer.echo(f"Current date/time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        typer.echo(
+            f"Current date/time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
         typer.echo(f"Form URL: {attendance_url}")
         typer.echo("")
         # generate and display QR code
-        qr = generate_qr_code(attendance_url, display_in_terminal=not no_terminal)
+        qr = generate_qr_code(
+            attendance_url, display_in_terminal=not no_terminal
+        )
         if save_image:
             save_qr_code_image(qr, output)
         typer.echo("")
